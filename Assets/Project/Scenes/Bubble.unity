@@ -212,8 +212,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetObject: {fileID: 2038070818}
   moveSpeed: 5
-  rotationScale: 0.1
-  rb: {fileID: 0}
+  rotationScale_X: 0.5
+  rotationScale_Z: 0.5
+  rb: {fileID: 67326515}
 --- !u!54 &67326515
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -222,8 +223,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 67326509}
   serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
+  m_Mass: 50
+  m_Drag: 50
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -239,7 +240,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!1 &75406207
 GameObject:
