@@ -13,48 +13,17 @@ public class Move : MonoBehaviour
 
     public Rigidbody rb;              // Rigidbodyコンポーネントへの参照
 
-    void Start()
-    {
-    }
-
-    void Update()
-    {
-
-    }
-
     void FixedUpdate()
     {
         // 前方へ一定速度で移動
         rb.MovePosition(rb.position + transform.forward * moveSpeed * Time.fixedDeltaTime);
 
-
-        // // 対象オブジェクトのX軸の回転角度を取得
-        // float targetXRotation = targetObject.eulerAngles.x;
-
-        // // UnityのeulerAnglesは0 ~ 360の範囲で返すため、-180 ~ 180で計算するように調整
-        // if (targetXRotation > 180)
-        // {
-        //     targetXRotation -= 360;
-        // }
-
-        // // 対象オブジェクトのZ軸の回転角度を取得
-        // float targetZRotation = targetObject.eulerAngles.z;
-
-
-
-        // // UnityのeulerAnglesは0 ~ 360の範囲で返すため、-180 ~ 180で計算するように調整
-        // if (targetZRotation > 180)
-        // {
-        //     targetZRotation -= 360;
-        // }
-
         // 対象オブジェクトのローカルから見た回転角度を取得
-        Vector3 targetLocalEulerAngles = targetObject.localEulerAngles;
-
+        Vector3 targetEulerAngles = targetObject.eulerAngles;
 
         // 値範囲を制限
-        float targetXRotation = NormalizeAngle(targetLocalEulerAngles.x);
-        float targetZRotation = NormalizeAngle(targetLocalEulerAngles.z);
+        float targetXRotation = NormalizeAngle(targetEulerAngles.x);
+        float targetZRotation = NormalizeAngle(targetEulerAngles.z);
 
         // 角度に応じた旋回速度を計算
         float xRotationSpeed = targetXRotation * rotationScale_X;
