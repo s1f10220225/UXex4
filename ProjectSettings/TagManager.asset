@@ -4,8 +4,10 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Stage
-  - item
+  - l_hand
+  - r_hand
+  - l_foot
+  - r_foot
   layers:
   - Default
   - TransparentFX

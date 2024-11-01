@@ -316,12 +316,12 @@ GameObject:
   - component: {fileID: 610975169}
   - component: {fileID: 610975168}
   m_Layer: 0
-  m_Name: Sphere
-  m_TagString: Untagged
+  m_Name: RHand
+  m_TagString: r_hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!135 &610975168
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -687,12 +687,12 @@ GameObject:
   - component: {fileID: 1854148619}
   - component: {fileID: 1854148618}
   m_Layer: 0
-  m_Name: Cube
-  m_TagString: item
+  m_Name: LHand
+  m_TagString: l_hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &1854148618
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -792,12 +792,12 @@ GameObject:
   - component: {fileID: 1946810138}
   - component: {fileID: 1946810137}
   m_Layer: 0
-  m_Name: Capsule
-  m_TagString: Untagged
+  m_Name: LFoot
+  m_TagString: l_foot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!136 &1946810137
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -909,12 +909,12 @@ GameObject:
   - component: {fileID: 2098634918}
   - component: {fileID: 2098634917}
   m_Layer: 0
-  m_Name: Cylinder
-  m_TagString: Untagged
+  m_Name: RFoot
+  m_TagString: r_foot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!136 &2098634917
 CapsuleCollider:
   m_ObjectHideFlags: 0
