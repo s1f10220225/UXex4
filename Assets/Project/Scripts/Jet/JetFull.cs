@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class JetFull : MonoBehaviour
 {
+    public static int score = 0;
     public float maxVelocityX = 1f;
     public float maxVelocityY = 1f;
     public float maxVelocityZ = 1f;
@@ -93,6 +94,9 @@ public class JetFull : MonoBehaviour
                 break;
             case "r_foot":
                 footRightPower += 0.1f;
+                break;
+            case "jewelry":
+                score += 1;
                 break;
         }
         Debug.Log(collision.gameObject.tag);
