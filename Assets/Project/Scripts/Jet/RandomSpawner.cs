@@ -5,11 +5,11 @@ using UnityEngine;
 public class RandomSpawner : MonoBehaviour
 {
     public GameObject[] prefabs;  // 生成するプレハブの配列
+    public float initialSpawnInterval = 2.0f;
     public float spawnInterval = 2.0f;  // 生成の間隔
     public float MoveSpeed = 5.0f;  // 基本のオブジェクト速度
 
     public Transform destroyPoint; // 削除ポイント（位置）
-    public static float destroyPoint2;
 
     // ゲーム内のすべてのオブジェクトの移動速度を制御する変数
     public static float globalSpeed = 1.0f;
@@ -24,7 +24,8 @@ public class RandomSpawner : MonoBehaviour
     private void Update()
     {
         currentSpeed = MoveSpeed * globalSpeed;
-        destroyPoint2 = destroyPoint.position.z - 1f;
+        spawnInterval = Mathf.Max(initialSpawnInterval / globalSpeed, 0.5f); // 最小値を0.5に制限
+
     }
 
     private IEnumerator SpawnObjects()

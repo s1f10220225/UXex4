@@ -8,6 +8,7 @@ TagManager:
   - r_hand
   - l_foot
   - r_foot
+  - jewelry
   layers:
   - Default
   - TransparentFX
