@@ -41,7 +41,7 @@ public class RandomSpawner : MonoBehaviour
     {
         int prefabIndex = Random.Range(0, prefabs.Length);
         float randomX = Random.Range(-6.0f, 6.0f);
-        float randomY = Random.Range(-3.0f, 3.0f);
+        float randomY = Random.Range(-3.0f, 4.0f);
         float z = 60.0f;
         Vector3 randomPosition = new Vector3(randomX, randomY, z);
 

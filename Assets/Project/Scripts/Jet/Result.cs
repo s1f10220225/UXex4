@@ -13,6 +13,6 @@ public class Result : MonoBehaviour
         float elapsedTime = PlayerPrefs.GetFloat("GameTime");
         float finalScore = PlayerPrefs.GetFloat("FinalScore");
 
-        scoreText.text = $"スコア: {score}\n生き残った時間: {elapsedTime:F2} seconds\n総合成績: {finalScore:F2}";
+        scoreText.text = $"スコア: {score}\n生き残った時間: {elapsedTime:F2} 秒\n総合成績: {finalScore:F2}";
     }
 }
