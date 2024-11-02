@@ -46,9 +46,5 @@ public class RandomSpawner : MonoBehaviour
         Vector3 randomPosition = new Vector3(randomX, randomY, z);
 
         GameObject instance = Instantiate(prefabs[prefabIndex], randomPosition, Quaternion.identity);
-
-        // 移動用スクリプトをアタッチ
-        ItemMove ItemMove = instance.AddComponent<ItemMove>();
-        // ItemMove.destroyZPosition = destroyPoint.position.z - 1f;
     }
 }

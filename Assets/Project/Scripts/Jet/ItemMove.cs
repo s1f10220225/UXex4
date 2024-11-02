@@ -19,6 +19,7 @@ public class ItemMove : MonoBehaviour
         // 一定位置を超えたらオブジェクトを削除
         if (transform.position.z < -5)
         {
+            JetFull.life -= 1;
             Destroy(gameObject);
         }
     }

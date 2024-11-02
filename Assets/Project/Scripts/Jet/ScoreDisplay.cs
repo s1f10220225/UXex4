@@ -10,12 +10,12 @@ public class ScoreDisplay : MonoBehaviour
     void Start()
     {
         // 初期スコアを反映
-        scoreText.text = "スコア: " + JetFull.score.ToString();
+        scoreText.text = "スコア: " + JetFull.score.ToString() + "ライフ： " + JetFull.life.ToString();
     }
 
     void Update()
     {
         // scoreの値を毎フレーム更新
-        scoreText.text = "スコア: " + JetFull.score.ToString();
+        scoreText.text = "スコア: " + JetFull.score.ToString() + "ライフ： " + JetFull.life.ToString();
     }
 }
