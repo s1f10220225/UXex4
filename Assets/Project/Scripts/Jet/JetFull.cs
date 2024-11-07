@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class JetFull : MonoBehaviour
 {
+    public AudioClip speedUpSound; // 効果音
+    private AudioSource audioSource;
     public float Force = 5f;
     public static int score = 0;
     public static int life = 10;
@@ -25,6 +27,9 @@ public class JetFull : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
+        score = 0;
+        life = 10;
     }
     // Update is called once per frame
     void Update()
@@ -76,17 +81,12 @@ public class JetFull : MonoBehaviour
         switch (other.gameObject.tag)
         {
             case "l_hand":
-                if (!isPowerBoostActive)
-                {
-                    score += 1;
-                    StartCoroutine(BoostHandPowerCoroutine(true));
-                }
-                break;
             case "r_hand":
+                score += 1;
+                PlaySound(speedUpSound);
                 if (!isPowerBoostActive)
                 {
-                    score += 1;
-                    StartCoroutine(BoostHandPowerCoroutine(false));
+                    StartCoroutine(BoostHandPowerCoroutine(other.gameObject.tag == "l_hand"));
                 }
                 break;
             case "jewelry":
@@ -96,6 +96,12 @@ public class JetFull : MonoBehaviour
         // 触れたオブジェクトを削除
         Destroy(other.gameObject);
     }
+    // サウンド再生
+    private void PlaySound(AudioClip clip)
+    {
+        audioSource.PlayOneShot(clip);
+    }
+
     // 一時的に手の力とグローバル速度を増加させるコルーチン
     private IEnumerator BoostHandPowerCoroutine(bool isLeftHand)
     {
@@ -132,6 +138,12 @@ public class JetFull : MonoBehaviour
         PlayerPrefs.SetInt("Score", score);
         PlayerPrefs.SetFloat("GameTime", gameTime);
         PlayerPrefs.SetFloat("FinalScore", finalScore);
+        BGM bgm = FindObjectOfType<BGM>();
+       if (bgm != null)
+       {
+           bgm.DestroyThisObject();
+       }
+
         // スコアシーンに移動
         SceneManager.LoadScene("ResultScene");
     }

@@ -9,6 +9,7 @@ TagManager:
   - l_foot
   - r_foot
   - jewelry
+  - Mocopi
   layers:
   - Default
   - TransparentFX
