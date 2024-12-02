@@ -20,6 +20,9 @@ public class RandomSpawner : MonoBehaviour
     private Coroutine spawnCoroutine;
     public Transform parent;
 
+    public float spawnRange = 5.0f; // 前回の生成位置からの許容範囲
+    private Vector3? previousSpawnPosition = null; // 前回の生成位置を記録
+
     private void OnEnable()
     {
         // コルーチンが再開されるようにアクティブ化時に開始
@@ -58,10 +61,34 @@ public class RandomSpawner : MonoBehaviour
     private void SpawnObject()
     {
         int prefabIndex = Random.Range(0, prefabs.Length);
-        float randomX = Random.Range(-6.0f, 6.0f);
-        float randomY = Random.Range(-3.0f, 4.0f);
+
+        Vector3 randomPosition;
         float z = 60.0f;
-        Vector3 randomPosition = new Vector3(randomX, randomY, z);
+
+        // 初回はランダム、2回目以降は前回位置に近い場所をランダムに選択
+        if (previousSpawnPosition == null)
+        {
+            float randomX = Random.Range(-6.0f, 6.0f);
+            float randomY = Random.Range(-3.0f, 4.0f);
+            randomPosition = new Vector3(randomX, randomY, z);
+        }
+        else
+        {
+            float baseX = previousSpawnPosition.Value.x;
+            float baseY = previousSpawnPosition.Value.y;
+
+            // 制約内で中心に移動する傾向を作る
+            float shiftX = Mathf.Sign(baseX) * Random.Range(spawnRange / 2, spawnRange);
+            float shiftY = Mathf.Sign(baseY) * Random.Range(spawnRange / 2, spawnRange);
+
+            // 生成範囲外に出ないように制限
+            float randomX = Mathf.Clamp(baseX - shiftX, -6.0f, 6.0f);
+            float randomY = Mathf.Clamp(baseY - shiftY, -3.0f, 4.0f);
+
+            randomPosition = new Vector3(randomX, randomY, z);
+        }
+
+        previousSpawnPosition = randomPosition; // 現在の位置を保存
 
         GameObject instance = Instantiate(prefabs[prefabIndex], randomPosition, Quaternion.identity);
         ItemMove itemMoveComponent = instance.GetComponent<ItemMove>();
@@ -72,6 +99,6 @@ public class RandomSpawner : MonoBehaviour
         else
         {
             Debug.LogWarning("ItemMove component not found on spawned object.");
-        }        
+        } 
     }
 }

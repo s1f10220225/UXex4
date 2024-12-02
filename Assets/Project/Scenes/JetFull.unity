@@ -639,6 +639,7 @@ MonoBehaviour:
   destroyPoint: {fileID: 70408988}
   faildClip: {fileID: 8300000, guid: e8e472a0fe03a474c816761c0d6835e9, type: 3}
   parent: {fileID: 1017045987}
+  spawnRange: 5
 --- !u!4 &1032627992
 Transform:
   m_ObjectHideFlags: 0
