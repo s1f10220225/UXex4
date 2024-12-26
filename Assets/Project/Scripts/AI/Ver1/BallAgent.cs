@@ -9,7 +9,7 @@ public class BallAgent : Agent
 {
     Rigidbody ballRigidbody;
     public Transform ground;
-    
+
     public override void Initialize()
     {
         // AgentのRigidBodyの参照の取得
@@ -39,17 +39,17 @@ public class BallAgent : Agent
         controlSignal.x = actions.ContinuousActions[0];
         controlSignal.z = actions.ContinuousActions[1];
         ballRigidbody.AddForce(controlSignal * 25);
-        
+
         // 地面から落ちたら負の報酬を与えてエピソードを終了
         if (ballRigidbody.position.y < -5)
         {
-            SetReward(-10.0f);
+            SetReward(10.0f);
             EndEpisode();
         }
         else
         {
             // まだプレイできるなら正の報酬を与える
-            SetReward(0.1f);
+            SetReward(-0.1f);
         }
     }
 

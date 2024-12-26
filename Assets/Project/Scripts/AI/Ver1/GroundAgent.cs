@@ -7,22 +7,21 @@ using Unity.MLAgents.Actuators;
 
 public class GroundAgent : Agent
 {
-    Transform ground;
     public GameObject ball;
     Rigidbody ball_Rigidbody;
     Transform ball_transform;
+    public float maxDistance = 14.0f; // 地面の端から中心までの最大距離を設定
 
     public override void Initialize()
     {
         // AgentのRigidBodyの参照の取得
-        ground = GetComponent<Transform>();
         ball_Rigidbody = ball.GetComponent<Rigidbody>();
         ball_transform = ball.GetComponent<Transform>();
     }
 
     public override void OnEpisodeBegin()
     {
-        ground.rotation = Quaternion.identity; // 地面の回転をリセット
+        transform.rotation = Quaternion.identity; // 地面の回転をリセット
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -39,24 +38,25 @@ public class GroundAgent : Agent
         float tiltX = actions.ContinuousActions[0];
         float tiltZ = actions.ContinuousActions[1];
 
-        Vector3 rotation = new Vector3(tiltX, 0, tiltZ) * 10; // 適切なスケールに調整
+        Vector3 rotation = new Vector3(tiltX, 0, tiltZ) * 100; // 適切なスケールに調整
         transform.Rotate(rotation * Time.deltaTime);
 
         // 現在の回転角を取得して制限をかける
-    Vector3 currentRotation = transform.rotation.eulerAngles;
-    currentRotation.x = ClampAngle(currentRotation.x, -10f, 10f); // x軸の最大角度を設定
-    currentRotation.z = ClampAngle(currentRotation.z, -10f, 10f); // z軸の最大角度を設定
+        Vector3 currentRotation = transform.rotation.eulerAngles;
+        currentRotation.x = ClampAngle(currentRotation.x, -45f, 45f); // x軸の最大角度を設定
+        currentRotation.z = ClampAngle(currentRotation.z, -45f, 45f); // z軸の最大角度を設定
+        transform.rotation = Quaternion.Euler(currentRotation);
 
         // ボールが落ちたら報酬を与える
         if (ball_transform.position.y < -5)
         {
-            SetReward(10.0f);
+            AddReward(-1.0f);
             EndEpisode();
         }
         else
         {
-            // 正の領域にいる場合は負の報酬を
-            SetReward(-0.1f);
+            // まだプレイできるなら正の報酬を与える
+            SetReward(0.1f);
         }
     }
 

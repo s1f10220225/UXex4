@@ -1,0 +1,49 @@
+behaviors:
+  BallAgent:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 128
+      buffer_size: 4096
+      learning_rate: 3.0e-4
+      beta: 5.0e-4
+      epsilon: 0.2
+      lambd: 0.95
+      num_epoch: 3
+      learning_rate_schedule: constant
+    network_settings:
+      normalize: false
+      hidden_units: 128
+      num_layers: 2
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+    keep_checkpoints: 5
+    max_steps: 500000
+    time_horizon: 64
+    summary_freq: 10000
+
+environment_parameters:
+  lesson:
+    curriculum:
+      - name: FirstTrain
+        completion_criteria:
+          measure: reward
+          behavior: BallAgent 
+          min_lesson_length: 200
+          threshold: 0.9
+        value: 1
+      - name: SecondTrain
+        completion_criteria:
+          measure: reward
+          behavior: BallAgent 
+          min_lesson_length: 200
+          threshold: 0.9
+        value: 2
+      - name: ThirdTrain
+        completion_criteria:
+          measure: reward
+          behavior: BallAgent 
+          min_lesson_length: 200
+          threshold: 0.9
+        value: 3
