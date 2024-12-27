@@ -9,7 +9,7 @@ public class JetFull : MonoBehaviour
     private AudioSource audioSource;
     public float Force = 5f;
     public static int score = 0;
-    public static int life = 10;
+    public static int life = 3;
     public float maxVelocityX = 1f;
     public float maxVelocityY = 1f;
     public float maxVelocityZ = 1f;
@@ -29,7 +29,7 @@ public class JetFull : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
         score = 0;
-        life = 10;
+        life = 3;
     }
     // Update is called once per frame
     void Update()
@@ -139,10 +139,10 @@ public class JetFull : MonoBehaviour
         PlayerPrefs.SetFloat("GameTime", gameTime);
         PlayerPrefs.SetFloat("FinalScore", finalScore);
         BGM bgm = FindObjectOfType<BGM>();
-       if (bgm != null)
-       {
-           bgm.DestroyThisObject();
-       }
+        if (bgm != null)
+        {
+            bgm.DestroyThisObject();
+        }
 
         // スコアシーンに移動
         SceneManager.LoadScene("ResultScene");
