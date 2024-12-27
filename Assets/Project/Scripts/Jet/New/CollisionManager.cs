@@ -18,11 +18,6 @@ public class CollisionManager : MonoBehaviour
 
     void Update()
     {
-        // プレイヤーの位置を制限
-        Vector3 position = transform.position;
-        position.x = Mathf.Clamp(position.x, -6.0f, 6.0f);
-        position.y = Mathf.Clamp(position.y, -5.0f, 5.0f);
-        transform.position = position;
         // ライフがなくなったらゲームオーバー
         if (life < 1)
         {
@@ -38,13 +33,18 @@ public class CollisionManager : MonoBehaviour
             case "r_hand":
                 score += 1;
                 audioSource.PlayOneShot(speedUpSound);
+                // 触れたオブジェクトを削除
+                Destroy(other.gameObject);
                 break;
             case "jewelry":
                 score += 2;
+                // 触れたオブジェクトを削除
+                Destroy(other.gameObject);
+                break;
+            case "Wind":
+                Debug.Log("Wind");
                 break;
         }
-        // 触れたオブジェクトを削除
-        Destroy(other.gameObject);
     }
     void GameOver()
     {

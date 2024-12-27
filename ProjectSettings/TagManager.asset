@@ -10,6 +10,7 @@ TagManager:
   - r_foot
   - jewelry
   - Mocopi
+  - Wind
   layers:
   - Default
   - TransparentFX
