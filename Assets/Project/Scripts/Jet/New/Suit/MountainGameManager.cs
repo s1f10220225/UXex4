@@ -42,6 +42,12 @@ public class MountainGameManager : MonoBehaviour
             {
                 countdownTimer = 0f;
                 EndCountdown();
+                // カウントダウンが終わったときに CollisionHandler のフラグをOFFにする(衝突判定ON)
+                var handler = FindObjectOfType<WingSuitCollisionHandler>();
+                if (handler != null)
+                {
+                    handler.EndCollisionHandling();
+                }
             }
             UpdateCountdownUI();
             return;
@@ -110,7 +116,6 @@ public class MountainGameManager : MonoBehaviour
         {
             // ゲームオーバー条件未満ならチェックポイントから再スタート
             RestartMidGame();
-            Debug.Log(terrainCollisionCount);
         }
     }
 
@@ -148,6 +153,8 @@ public class MountainGameManager : MonoBehaviour
                 playerRigidbody.velocity = Vector3.zero;
                 playerRigidbody.angularVelocity = Vector3.zero;
             }
+            Debug.Log("" + checkpointPosition);
+            Debug.Log("" + playerTransform.position);
         }
 
         // 5. 再開準備: カウントダウンを開始

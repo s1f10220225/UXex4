@@ -68,7 +68,7 @@ public class WingSuitController : MonoBehaviour
         Vector3 windMovement = CalculateWindMovement();
 
         // 前進ベクトル & 落下ベクトル & 左右移動
-        Vector3 forwardMovement = transform.forward * currentForwardSpeed;
+        Vector3 forwardMovement = transform.up * currentForwardSpeed;
         Vector3 downwardMovement = Vector3.down * currentFallSpeed;
         Vector3 lateralMovement = CalculateLateralMovement();
 

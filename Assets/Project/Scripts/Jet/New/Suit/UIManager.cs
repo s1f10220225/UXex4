@@ -38,13 +38,13 @@ public class UIManager : MonoBehaviour
             // リングスコア合計 = (1× ring1Count + 5× ring5Count)
             int totalScore = GlobalGameManager.Instance.ring1Count
                            + GlobalGameManager.Instance.ring5Count * 5;
-            scoreText.text = "Score: " + totalScore;
+            scoreText.text = "スコア: " + totalScore;
         }
 
         if (distanceText)
         {
             float dist = GlobalGameManager.Instance.distanceTraveled;
-            distanceText.text = "Distance: " + dist.ToString("F1") + "m";
+            distanceText.text = "距離: " + dist.ToString("F1") + "m";
         }
     }
 

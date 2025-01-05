@@ -1,10 +1,14 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; }
 
+    [Header("AudioMixer Groups")]
+    [SerializeField] private AudioMixerGroup bgmMixerGroup;
+    [SerializeField] private AudioMixerGroup seMixerGroup;
     [Header("=== BGM ===")]
     [Tooltip("タイトル & Mountainシーンで共通")]
     public AudioClip bgmTitleAndGame;
@@ -37,10 +41,13 @@ public class AudioManager : MonoBehaviour
         bgmSource = gameObject.AddComponent<AudioSource>();
         bgmSource.loop = true;
         bgmSource.playOnAwake = false;
+        bgmSource.outputAudioMixerGroup = bgmMixerGroup;
+
 
         seSource = gameObject.AddComponent<AudioSource>();
         seSource.loop = false;
         seSource.playOnAwake = false;
+        seSource.outputAudioMixerGroup = seMixerGroup;
 
         SceneManager.activeSceneChanged += OnSceneChanged;
     }
