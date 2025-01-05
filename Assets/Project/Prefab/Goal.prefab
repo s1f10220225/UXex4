@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 7801946321732635340}
   - component: {fileID: 9197584820283728336}
   - component: {fileID: 1744358954427650202}
-  - component: {fileID: 3614890397520760811}
+  - component: {fileID: -6489846213081735129}
   m_Layer: 0
-  m_Name: jewelry
-  m_TagString: Checkpoint
+  m_Name: Goal
+  m_TagString: Goal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -106,7 +106,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3614890397520760811
+--- !u!114 &-6489846213081735129
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,7 +115,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 4309849878404586743}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7b27bf89058e804f98f23c2a24fd5b1, type: 3}
+  m_Script: {fileID: 11500000, guid: 21c294fcdb964b249a9387944eb1448e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  restartPosition: {x: 0, y: 0, z: 0}

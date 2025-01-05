@@ -66,7 +66,15 @@ public class Gliding : MonoBehaviour
         Vector3 liftForce = normal * area * windStrength * liftFactor * forceMultiplier;
 
         // 風向きに平行な力（ドラッグ力）
-        Vector3 dragForce = Vector3.ProjectOnPlane(localWindDirection, normal) * area * windStrength * forceMultiplier * Vector3 new(1, 0, 1);
+        // 風向ベクトルを法線で平面投影し、指定の範囲のみ有効にする
+        Vector3 projectedWind = Vector3.ProjectOnPlane(localWindDirection, normal);
+
+        // ドラッグフォース計算用にXY平面などコンポーネントを調整する
+        Vector3 adjustedWind = Vector3.Scale(projectedWind, new Vector3(1f, 0f, 1f));
+
+        // エリアや風の強さ、倍率を掛け合わせて最終的なドラッグフォースを求める
+        Vector3 dragForce = adjustedWind * area * windStrength * forceMultiplier;
+
         Debug.Log("" + liftForce + "" + dragForce);
 
         // 総合的な力を返す
