@@ -35,9 +35,9 @@ public class UIManager : MonoBehaviour
     {
         if (scoreText)
         {
-            // リングスコア合計 = (1× ring1Count + 5× ring5Count)
-            int totalScore = GlobalGameManager.Instance.ring1Count
-                           + GlobalGameManager.Instance.ring5Count * 5;
+            // リングスコア合計 = (100× ring1Count + 500× ring5Count)
+            int totalScore = GlobalGameManager.Instance.ring1Count * 100
+                           + GlobalGameManager.Instance.ring5Count * 500;
             scoreText.text = "スコア: " + totalScore;
         }
 

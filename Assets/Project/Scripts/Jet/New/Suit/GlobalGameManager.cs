@@ -92,8 +92,8 @@ public class GlobalGameManager : MonoBehaviour
     /// </summary>
     public void AddRing(int value)
     {
-        if (value == 1) ring1Count++;
-        else if (value == 5) ring5Count++;
+        if (value == 100) ring1Count++;
+        else if (value == 500) ring5Count++;
     }
 
     /// <summary>

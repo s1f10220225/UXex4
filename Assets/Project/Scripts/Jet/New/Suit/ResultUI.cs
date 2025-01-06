@@ -7,10 +7,10 @@ public class ResultUI : MonoBehaviour
     [Header("ゲーム終了理由 (GameOver / GameClear)")]
     [SerializeField] private Text endTypeText;
 
-    [Header("リング1点の表示 (例 '1pt Ring x 0 = 0')")]
+    [Header("リング100点の表示 (例 '100pt Ring x 0 = 0')")]
     [SerializeField] private Text ring1Text;
 
-    [Header("リング5点の表示 (例 '5pt Ring x 0 = 0')")]
+    [Header("リング500点の表示 (例 '500pt Ring x 0 = 0')")]
     [SerializeField] private Text ring5Text;
 
     [Header("移動距離 (例 'Distance: 1234.5m')")]
@@ -45,10 +45,10 @@ public class ResultUI : MonoBehaviour
         GameEndReason reason = GlobalGameManager.Instance.GameEndType;
 
         // 2) リングの点数
-        int ring1Count = GlobalGameManager.Instance.ring1Count;   // 1点リングの個数
-        int ring5Count = GlobalGameManager.Instance.ring5Count;   // 5点リングの個数
-        int ring1Score = ring1Count;             // (1点リング×個数)
-        int ring5Score = ring5Count * 5;         // (5点リング×個数)
+        int ring1Count = GlobalGameManager.Instance.ring1Count;   // 100点リングの個数
+        int ring5Count = GlobalGameManager.Instance.ring5Count;   // 500点リングの個数
+        int ring1Score = ring1Count * 100;             // (100点リング×個数)
+        int ring5Score = ring5Count * 500;         // (500点リング×個数)
         int sumRingScore = ring1Score + ring5Score;
 
         // 3) 移動距離
@@ -81,21 +81,21 @@ public class ResultUI : MonoBehaviour
             AudioManager.Instance.PlayResultItemSE(); // 項目表示SE
         }
 
-        // (B) 1点リング
+        // (B) 100点リング
         yield return new WaitForSeconds(delayBetweenItems);
         if (ring1Text)
         {
             ring1Text.gameObject.SetActive(true);
-            ring1Text.text = $"1ptリング x {ring1Count} = {ring1Score}";
+            ring1Text.text = $"100ptリング x {ring1Count} = {ring1Score}";
             AudioManager.Instance.PlayResultItemSE();
         }
 
-        // (C) 5点リング
+        // (C) 500点リング
         yield return new WaitForSeconds(delayBetweenItems);
         if (ring5Text)
         {
             ring5Text.gameObject.SetActive(true);
-            ring5Text.text = $"5ptリング x {ring5Count} = {ring5Score}";
+            ring5Text.text = $"500ptリング x {ring5Count} = {ring5Score}";
             AudioManager.Instance.PlayResultItemSE();
         }
 

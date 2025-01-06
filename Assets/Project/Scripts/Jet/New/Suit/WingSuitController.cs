@@ -35,12 +35,33 @@ public class WingSuitController : MonoBehaviour
     [Tooltip("風の最大効果を制限するためのクランプ")]
     [SerializeField] private float maxWindFactor = 2f;
 
-    // Rigidbody (移動用)
+    // =========================== 追加したパラメータ ===========================
+    [Header("=== 手動モード設定 ===")]
+    [Tooltip("Escキーで手動モードとキャプチャーモードを切り替える")]
+    [SerializeField] private bool isManualMode = false; 
+
+    [Tooltip("手動モード時の前進速度を増減する量（W/S用）")]
+    [SerializeField] private float manualForwardSpeedStep = 5f;
+
+    [Tooltip("手動モード時の上下(↑/↓)で落下速度を増減する量")]
+    [SerializeField] private float manualFallSpeedStep = 5f;
+
+    [Tooltip("手動モード時の左右移動速度 (A/D)")]
+    [SerializeField] private float manualSideSpeed = 10f;
+
+    [Tooltip("手動モードでの風倍率 (一定倍率)")]
+    [SerializeField] private float manualWindMultiplier = 1.0f;
+    // =======================================================================
+
+    // Rigidbody
     private Rigidbody rb;
 
-    // 現在の落下速度・前進速度
+    // 現在の落下速度・前進速度 (キャプチャーモードにおける数値)
     private float currentFallSpeed;
     private float currentForwardSpeed;
+
+    // 手動モード専用の前進速度
+    private float manualForwardCurrent;
 
     // 風エリア (Wind) のリスト (複数重なったら全部足し合わせ)
     private List<Wind> activeWinds = new List<Wind>();
@@ -50,6 +71,9 @@ public class WingSuitController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         currentFallSpeed = baseFallSpeed;
         currentForwardSpeed = baseForwardSpeed;
+
+        // 手動モード用前進速度の初期値
+        manualForwardCurrent = baseForwardSpeed;
     }
 
     private void Update()
@@ -61,23 +85,56 @@ public class WingSuitController : MonoBehaviour
             return;
         }
 
-        // 手足の開き具合で 落下速度 / 前進速度 を決定
-        AdjustSpeedsBasedOnLimbs();
+        // Escキーでモード切り替え (手動モード <-> キャプチャーモード)
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            isManualMode = !isManualMode;
+        }
 
-        // 風の影響を計算
+        // 1) モードごとの 落下速度 / 前進速度 の計算
+        if (isManualMode)
+        {
+            // 手動モード
+            ManualModeControl();
+        }
+        else
+        {
+            // キャプチャーモード (既存コード)
+            AdjustSpeedsBasedOnLimbs();
+        }
+
+        // 2) 風の影響を計算
         Vector3 windMovement = CalculateWindMovement();
 
-        // 前進ベクトル & 落下ベクトル & 左右移動
-        Vector3 forwardMovement = transform.up * currentForwardSpeed;
-        Vector3 downwardMovement = Vector3.down * currentFallSpeed;
-        Vector3 lateralMovement = CalculateLateralMovement();
+        // 3) 前進ベクトル & 落下ベクトル & 左右移動
+        Vector3 forwardMovement;
+        Vector3 downwardMovement;
+        Vector3 lateralMovement;
 
-        // 総合速度
+        if (isManualMode)
+        {
+            // --- 手動モード ---
+            // forwardMovement は manualForwardCurrent
+            forwardMovement = transform.up * manualForwardCurrent;
+            // 落下は currentFallSpeed
+            downwardMovement = Vector3.down * currentFallSpeed;
+            // 左右移動
+            lateralMovement = CalculateManualLateral();
+        }
+        else
+        {
+            // --- キャプチャーモード ---
+            forwardMovement = transform.up * currentForwardSpeed;
+            downwardMovement = Vector3.down * currentFallSpeed;
+            lateralMovement = CalculateLateralMovement(); // 既存コード
+        }
+
+        // 4) 合算して Rigidbody にセット
         rb.velocity = forwardMovement + downwardMovement + lateralMovement + windMovement;
     }
 
     /// <summary>
-    /// 手足の開き具合によって落下速度・前進速度を調整する
+    /// キャプチャーモード (既存コード)
     /// </summary>
     private void AdjustSpeedsBasedOnLimbs()
     {
@@ -85,7 +142,6 @@ public class WingSuitController : MonoBehaviour
         if (leftHandTransform && rightHandTransform)
         {
             float handDistance = Vector3.Distance(leftHandTransform.position, rightHandTransform.position);
-            // 手を広げるほど落下が遅くなる (baseFallSpeed - 距離*係数)
             currentFallSpeed = baseFallSpeed - handDistance * handEffectMultiplier;
         }
 
@@ -93,17 +149,16 @@ public class WingSuitController : MonoBehaviour
         if (leftFootTransform && rightFootTransform)
         {
             float footDistance = Vector3.Distance(leftFootTransform.position, rightFootTransform.position);
-            // 足を広げるほど前進速度が上がる (baseForwardSpeed + 距離*係数)
             currentForwardSpeed = baseForwardSpeed + footDistance * footEffectMultiplier;
         }
 
-        // クランプ適用
-        currentFallSpeed = Mathf.Clamp(currentFallSpeed, minFallSpeed, maxFallSpeed);
+        // クランプ
+        currentFallSpeed   = Mathf.Clamp(currentFallSpeed,   minFallSpeed,   maxFallSpeed);
         currentForwardSpeed = Mathf.Clamp(currentForwardSpeed, minForwardSpeed, maxForwardSpeed);
     }
 
     /// <summary>
-    /// 左右移動 (手の左右差で計算)
+    /// キャプチャーモード (既存コード) - 左右移動
     /// </summary>
     private Vector3 CalculateLateralMovement()
     {
@@ -120,32 +175,35 @@ public class WingSuitController : MonoBehaviour
     }
 
     /// <summary>
-    /// 風エリア (Wind) の影響を合算する
-    /// ・useHandDistanceForWind が true なら、手の広げ具合を風の影響にも反映
+    /// 風の影響を合算
+    /// キャプチャーモード: useHandDistanceForWind によって手の広げ具合を掛け合わせる
+    /// 手動モード: manualWindMultiplier を掛ける (常に一定)
     /// </summary>
     private Vector3 CalculateWindMovement()
     {
         Vector3 totalWind = Vector3.zero;
 
-        // 手の広げ具合 (オプション)
         float handFactor = 1f;
-        if (useHandDistanceForWind && leftHandTransform && rightHandTransform)
+        if (!isManualMode)
         {
-            float handDistance = Vector3.Distance(leftHandTransform.position, rightHandTransform.position);
-            // たとえば「1 + (手の距離 * windHandMultiplier)」で倍率を上げる
-            handFactor = 1f + handDistance * windHandMultiplier;
-            // 上限を設定
-            handFactor = Mathf.Clamp(handFactor, 1f, maxWindFactor);
+            // === キャプチャーモード ===
+            if (useHandDistanceForWind && leftHandTransform && rightHandTransform)
+            {
+                float handDistance = Vector3.Distance(leftHandTransform.position, rightHandTransform.position);
+                handFactor = 1f + handDistance * windHandMultiplier;
+                handFactor = Mathf.Clamp(handFactor, 1f, maxWindFactor);
+            }
+        }
+        else
+        {
+            // === 手動モード ===
+            handFactor = manualWindMultiplier; // 常に一定の倍率
         }
 
         foreach (var wind in activeWinds)
         {
-            // 風の基本ベクトル
             Vector3 windVec = wind.WindDirection * wind.WindStrength;
-
-            // 手の広げ具合を乗算する (オプション)
             windVec *= handFactor;
-
             totalWind += windVec;
         }
 
@@ -153,7 +211,59 @@ public class WingSuitController : MonoBehaviour
     }
 
     /// <summary>
-    /// 風エリアに入った時
+    /// 手動モードでの制御(W,S,↑,↓)による落下速度・前進速度の調整
+    /// </summary>
+    private void ManualModeControl()
+    {
+        // --- 前進速度 (W,S) ---
+        //   W: 前進速度を増やす
+        //   S: 前進速度を減らす
+        if (Input.GetKey(KeyCode.W))
+        {
+            manualForwardCurrent += manualForwardSpeedStep * Time.deltaTime;
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            manualForwardCurrent -= manualForwardSpeedStep * Time.deltaTime;
+        }
+
+        // クランプ (前進速度は 0～maxForwardSpeed の範囲)
+        manualForwardCurrent = Mathf.Clamp(manualForwardCurrent, 0f, maxForwardSpeed);
+
+        // --- 落下速度 (↑, ↓) ---
+        //   ↑: 落下速度を減らす(より浮く)
+        //   ↓: 落下速度を増やす(より落ちる)
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            currentFallSpeed -= manualFallSpeedStep * Time.deltaTime;
+        }
+        else if (Input.GetKey(KeyCode.DownArrow))
+        {
+            currentFallSpeed += manualFallSpeedStep * Time.deltaTime;
+        }
+
+        // クランプ (落下速度)
+        currentFallSpeed = Mathf.Clamp(currentFallSpeed, minFallSpeed, maxFallSpeed);
+    }
+
+    /// <summary>
+    /// 手動モードでの左右移動 (A,D) 
+    /// ※ 上下は落下速度で調整するので、ここでは上下移動ベクトルは付加しない
+    /// </summary>
+    private Vector3 CalculateManualLateral()
+    {
+        float side = 0f;
+        if (Input.GetKey(KeyCode.A)) side -= 1f;
+        if (Input.GetKey(KeyCode.D)) side += 1f;
+
+        float sideSpeed = side * manualSideSpeed;
+        sideSpeed = Mathf.Clamp(sideSpeed, -maxSideSpeed, maxSideSpeed);
+
+        return transform.right * sideSpeed;
+    }
+
+    /// <summary>
+    /// 風エリアに入った時 (既存コード)
     /// </summary>
     private void OnTriggerEnter(Collider other)
     {
@@ -167,7 +277,7 @@ public class WingSuitController : MonoBehaviour
     }
 
     /// <summary>
-    /// 風エリアから出た時
+    /// 風エリアから出た時 (既存コード)
     /// </summary>
     private void OnTriggerExit(Collider other)
     {

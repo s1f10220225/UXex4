@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 512c9b1f6ffcf26498a63e5d4a8d565b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ringValue: 1
+  ringValue: 100
 --- !u!114 &2940440297010017525
 MonoBehaviour:
   m_ObjectHideFlags: 0

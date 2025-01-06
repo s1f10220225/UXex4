@@ -484,6 +484,11 @@ MonoBehaviour:
   useHandDistanceForWind: 0
   windHandMultiplier: 0.5
   maxWindFactor: 2
+  isManualMode: 0
+  manualForwardSpeedStep: 5
+  manualFallSpeedStep: 5
+  manualSideSpeed: 10
+  manualWindMultiplier: 1
 --- !u!114 &296535817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -991,7 +996,7 @@ RectTransform:
   m_GameObject: {fileID: 807058831}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 0.2, z: 1}
+  m_LocalScale: {x: 2, y: 0.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1864821238}
